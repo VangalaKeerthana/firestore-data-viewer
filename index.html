@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Firestore Data Display</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+    }
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+    }
+    th {
+      background-color: #f4f4f4;
+    }
+  </style>
+</head>
+<body>
+  <h1>Firestore Data</h1>
+  <table id="data-table">
+    <thead>
+      <tr>
+        <th>Collection</th>
+        <th>Document ID</th>
+        <th>Data</th>
+      </tr>
+    </thead>
+    <tbody>
+      <!-- Rows will be dynamically added here -->
+    </tbody>
+  </table>
+
+  <script>
+    // Fetch the JSON data and display it in a table
+    fetch('firestoreData.json')
+      .then(response => response.json())
+      .then(data => {
+        const tableBody = document.querySelector("#data-table tbody");
+
+        // Loop through collections
+        for (const [collection, documents] of Object.entries(data)) {
+          for (const [docId, docData] of Object.entries(documents)) {
+            const row = document.createElement("tr");
+            
+            // Collection name
+            const collectionCell = document.createElement("td");
+            collectionCell.textContent = collection;
+            row.appendChild(collectionCell);
+            
+            // Document ID
+            const docIdCell = document.createElement("td");
+            docIdCell.textContent = docId;
+            row.appendChild(docIdCell);
+            
+            // Document data (formatted as JSON)
+            const dataCell = document.createElement("td");
+            dataCell.textContent = JSON.stringify(docData, null, 2);
+            row.appendChild(dataCell);
+
+            tableBody.appendChild(row);
+          }
+        }
+      })
+      .catch(error => {
+        console.error('Error fetching JSON:', error);
+      });
+  </script>
+</body>
+</html>
